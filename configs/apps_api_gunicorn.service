@@ -1,0 +1,15 @@
+[Unit]
+Description=APPs Test API gunicorn daemon
+After=network.target
+
+[Service]
+User=www-data
+Group=www-data
+WorkingDirectory={{work_dir}}
+ExecStart=/bin/sh -c '{{work_dir}}/venv/bin/gunicorn \
+--bind unix:{{work_dir}}/appsapi.sock \
+--access-logfile {{work_dir}}/gunicorn_access.log \
+appsapi.wsgi:application'
+
+[Install]
+WantedBy=multi-user.target
