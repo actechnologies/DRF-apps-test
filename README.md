@@ -71,7 +71,7 @@ http://localhost/api/v1.0/apps/
 #### работа с моделью apps
 * создание
 
-POST запрос на ```http://localhost/api/v1.0/apps/```
+POST запрос на ```/api/v1/apps/```
 
 Обязательное поле **appname**
 
@@ -79,27 +79,27 @@ POST запрос на ```http://localhost/api/v1.0/apps/```
 
 * просмотр (чтение)
 
-GET запрос на ```http://localhost/api/v1.0/apps/<appname>```
+GET запрос на ```/api/v1/apps/<appname>```
 
 * изменение 
 
-PUT запрос на ```http://localhost/api/v1.0/apps/<appname>```
+PUT запрос на ```/api/v1/apps/<appname>```
 
 Обязательное поле **appname** (при PATCH можно отправлять любые поля формы, кроме ключа)
 
 *  удаление
 
-DELETE запрос на ```http://localhost/api/v1.0/apps/<appname>```
+DELETE запрос на ```/api/v1/apps/<appname>```
 
 * сброс API ключа
 
-POST запрос на  ```http://localhost/api/v1.0/apps/<appname>/new_key/```
+POST запрос на  ```/api/v1/apps/<appname>/new_key/```
 
 В ответ прилетает сгенерированный ключ API ```api_key```, он не хранится нигде и не может быть отправлен клиенту повторно, клиент самостоятельно хранит ключ и использует его в дальнейшем
 
 #### проверка API ключа приложения
 
-GET запрос на ```http://localhost/api/test/```
+GET запрос на ```/api/test/```
 
 **обязательный заголовок:**
 
@@ -109,4 +109,4 @@ GET запрос на ```http://localhost/api/test/```
 
 проверка можно быть реализована с помощью команды:
 
-```curl -H "Authorization: Api-Key <your_key>" http://localhost/api/test/```
+```curl -H "Authorization: Api-Key <your_key>" <app_url>/api/test/```
