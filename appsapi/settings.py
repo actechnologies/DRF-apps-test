@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'i9a%+$$mwq3wzq@6aew$20*yq-@l&y#05-bp%=qxnw%lk!gybz')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DJANGO_DEBUG', False)
+DEBUG = os.environ.get('DJANGO_DEBUG', True)
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
@@ -123,4 +123,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
+# DRF Api-Key settings
+# https://florimondmanca.github.io/djangorestframework-api-key/guide/
+API_KEY_CUSTOM_HEADER = "HTTP_X_API_KEY"

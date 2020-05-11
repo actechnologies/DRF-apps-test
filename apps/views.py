@@ -84,13 +84,10 @@ class APPRetrieveAPIView(RetrieveAPIView):
         :param request: user request obj
         :return: 'rest_framework.respons.Response' with 200/403 HTTP code
         """
-        if "HTTP_AUTHORIZATION" in request.META:
-            key = request.META["HTTP_AUTHORIZATION"].replace('Api-Key ', '')
-            api_key = APIKey.objects.get_from_key(key)
-            app = APPModel.objects.get(api_key=api_key)
-            app.requests_count += 1
-            app.last_access = datetime.datetime.now(datetime.timezone.utc)
-            app.save()
-            return Response({**APPSerializer(app, context={'request': request}).data}, status=status.HTTP_200_OK)
-        else:
-            return Response(data={'detail': 'API key missing'}, status=status.HTTP_403_FORBIDDEN)
+        key = request.META["HTTP_X_API_KEY"]
+        api_key = APIKey.objects.get_from_key(key)
+        app = APPModel.objects.get(api_key=api_key)
+        app.requests_count += 1
+        app.last_access = datetime.datetime.now(datetime.timezone.utc)
+        app.save()
+        return Response({**APPSerializer(app, context={'request': request}).data}, status=status.HTTP_200_OK)
