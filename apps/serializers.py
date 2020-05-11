@@ -29,12 +29,15 @@ class APPSerializer(serializers.HyperlinkedModelSerializer):
         :param validated_data: users data
         :return: updated APPModel instance
         """
-        instance.appname = validated_data.get('appname', instance.appname)
-        instance.api_key.name = validated_data.get('appname', instance.appname)
-        instance.last_access = validated_data.get('last_access', instance.last_access)
-        instance.requests_count = validated_data.get('requests_count', instance.requests_count)
+        if 'appname' in validated_data:
+            instance.appname = validated_data.get('appname')
+            instance.api_key.name = validated_data.get('appname', instance.appname)
+            instance.api_key.save()
+        if 'last_access' in validated_data:
+            instance.last_access = validated_data.get('last_access', instance.last_access)
+        if 'requests_count' in validated_data:
+            instance.requests_count = validated_data.get('requests_count', instance.requests_count)
         instance.save()
-        instance.api_key.save()
         return instance
 
     class Meta:
