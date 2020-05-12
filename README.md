@@ -2,7 +2,7 @@
 Тестовое задание
 
 
-### Задача
+## Задача
 реализовать API, позволяющее добавлять, изменять, просматривать и удалять данные в модели "Приложения".
 "Приложения" – это модель, которая хранит в себе внешние источники, которые будут обращаться к API. Обязательные поля модели: ID, Название приложения, Ключ API. Поле "Ключ API" нельзя менять через API напрямую, должен быть метод, позволяющий создать новый ключ API.
 После добавления приложения – должна быть возможность использовать "Ключ API" созданного приложения для осуществления запросов к метод /api/test, метод должен возвращать JSON, содержащий всю информацию о приложении.
@@ -13,62 +13,33 @@
 + Django REST framework
 
 
-### Deploy
+## Зависимости проекта
 
-#### Debian-based OS
+* docker v19.03.8
+* docker-compose v1.25.5
 
-```bash
-# getting src
-git clone https://github.com/actechnologies/DRF-apps-test.git && cd DRF-apps-test
+## Deploy
 
-# setting venv
-sudo apt install python3-venv -y
-python3 -m venv ./venv
-source venv/bin/activate
+1) копируем ENV файл
+```cp ./.env-example ./.env```
+2) вносим необходимые изменения любым удобным вам текстовым редактором, сменить необходимо секретный ключ, пароль пользователя по умолчанию и пароль пользоваьеля БД: ```DJANGO_SECRET_KEY```, ```DJANGO_SUPERUSER_PASSWORD```, ```POSTGRES_PASSWORD```
+3) запускаем контейнеры ```docker-compose up -d --build```
 
-# install dependies
-pip install --upgrade pip
-pip install -r requirements.txt
-sudo apt install nginx postgresql-10 -y
+Приложение будет запущено по адресу **```http://localhost:8000/```** 
 
-# setup database
-echo "create database appsapi; create user appsapi with encrypted password 'passw0rd'; grant all privileges on database appsapi to appsapi;" | sudo -u postgres psql 
-python manage.py makemigrations
-python manage.py migrate
-
-# change data for services configs
-sed -i 's?{{work_dir}}?'`pwd`'?' configs/apps_api_gunicorn.service
-sed -i 's?{{work_dir}}?'`pwd`'?' configs/apps_api_nginx.conf
-
-# copy configs to destination
-sudo chown www-data:www-data .
-sudo cp configs/apps_api_nginx.conf /etc/nginx/sites-available/
-sudo ln -s /etc/nginx/sites-available/apps_api_nginx.conf /etc/nginx/sites-enabled/
-sudo cp configs/apps_api_gunicorn.service /etc/systemd/system/
-
-# start services
-sudo systemctl daemon-reload
-python manage.py collectstatic --noinput
-sudo systemctl start apps_api_gunicorn
-sudo nginx -s reload
-```
-
-### How To
+## How To
 для простоты и ускорения не стал реализовывать дополнительную авторизацию для методов API, оставил модель управления доступом стандартную django, на саму логику работы приложения это не влияет для тестового варианта, при желании можно будет добавить любой удобный метод авторизации (JWT, например) всего в пару строк
 
 проверить работу API можно через стандартный веб-интерфейс DRF
 
-#### для проверки api:
-* зарегистрируйте аккаунт админа в django:
-```bash
-python manage.py createsuperuser
-```
-* авторизуйтесь в админке
-http://localhost/admin
-* откройте ссылку с api
-http://localhost/api/v1.0/apps/
+### для проверки api:
 
-#### работа с моделью apps
+* авторизуйтесь в админке
+```/admin```
+* откройте ссылку с api
+```/api/v1/apps/```
+
+### работа с моделью apps
 * создание
 
 POST запрос на ```/api/v1/apps/```
@@ -97,7 +68,7 @@ POST запрос на  ```/api/v1/apps/<appname>/new_key/```
 
 В ответ прилетает сгенерированный ключ API ```api_key```, он не хранится нигде и не может быть отправлен клиенту повторно, клиент самостоятельно хранит ключ и использует его в дальнейшем
 
-#### проверка API ключа приложения
+### проверка API ключа приложения
 
 GET запрос на ```/api/test/```
 
