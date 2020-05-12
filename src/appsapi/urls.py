@@ -26,6 +26,6 @@ router.register('', APPViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/v1.0/apps/', include(router.urls)),
+    path('api/v1/apps/', include(router.urls)),
     path('api/test/', APPRetrieveAPIView.as_view(), name='test_api')
 ]
