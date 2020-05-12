@@ -23,9 +23,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'i9a%+$$mwq3wzq@6aew$20*yq-@l&y#05-bp%=qxnw%lk!gybz')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DJANGO_DEBUG', True)
+DEBUG = int(os.environ.get('DJANGO_DEBUG', 0))
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", " 127.0.0.1 localhost").split(" ")
 
 
 # Application definition
@@ -76,12 +76,13 @@ WSGI_APPLICATION = 'appsapi.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'HOST': 'localhost',
-        'NAME': 'appsapi',
-        'USER': 'appsapi',
-        'PASSWORD': os.environ.get('DJANGO_DB_PASSWORD', 'passw0rd')
+    "default": {
+        "ENGINE": os.environ.get("DJANGO_SQL_ENGINE", "django.db.backends.postgresql"),
+        "NAME": os.environ.get("POSTGRES_DB", "appsapi"),
+        "USER": os.environ.get("POSTGRES_USER", "appsapi"),
+        "PASSWORD": os.environ.get("POSTGRES_PASSWORD", "passw0rd"),
+        "HOST": os.environ.get("DJANGO_SQL_HOST", "localhost"),
+        "PORT": os.environ.get("DJANGO_SQL_PORT", "5432"),
     }
 }
 
